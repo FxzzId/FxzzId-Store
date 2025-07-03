@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FxzzId Store</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://qu.ax/cFoTS.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 100, 0.3);
+            margin-top: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* (Keep all previous CSS styles the same) */
+        /* ... (All other CSS remains unchanged) ... */
+        
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <div class="music-control" onclick="toggleMusic()" title="Toggle Music">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2v20a10 10 0 0 0 0-20zm0 22a12 12 0 1 1 0-24 12 12 0 0 1 0 24z"/>
+        </svg>
+    </div>
+    
+    <div class="container floating">
+        <header>
+            <h1>FxzzId Store</h1>
+            <p class="tagline">Premium Digital Products at Affordable Prices</p>
+        </header>
+        
+        <div class="products">
+            <!-- NOKOS Product -->
+            <div class="product">
+                <h2>[NOKOS]</h2>
+                <div class="price">Rp5.000,00 - Rp20.000,00</div>
+                <p>Various NOKOS options available</p>
+                <button class="dropdown-btn" onclick="toggleDropdown('nokos-dropdown')">
+                    <span>Show Options</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div id="nokos-dropdown" class="dropdown-content">
+                    <div class="dropdown-item">
+                        <h3>[NOKOS INDO FRESH]</h3>
+                        <div class="price">Rp4.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('NOKOS INDO FRESH - Rp4.000,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[NOKOS PHILIPINA FRESH]</h3>
+                        <div class="price">Rp6.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('NOKOS PHILIPINA FRESH - Rp6.000,00')">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PANEL PTERODACTYL Product -->
+            <div class="product">
+                <h2>[PANEL PTERODACTYL]</h2>
+                <div class="price">Rp1.000,00 - Rp5.000,00</div>
+                <p>Various Pterodactyl panel options</p>
+                <button class="dropdown-btn" onclick="toggleDropdown('ptero-dropdown')">
+                    <span>Show Options</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div id="ptero-dropdown" class="dropdown-content">
+                    <div class="dropdown-item">
+                        <h3>[1GB | CPU 50%]</h3>
+                        <div class="price">Rp1.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 1GB | CPU 50% - Rp1.000,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[2GB | CPU 100%]</h3>
+                        <div class="price">Rp1.500,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 2GB | CPU 100% - Rp1.500,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[3GB | CPU 150%]</h3>
+                        <div class="price">Rp2.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 3GB | CPU 150% - Rp2.000,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[4GB | CPU 200%]</h3>
+                        <div class="price">Rp2.500,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 4GB | CPU 200% - Rp2.500,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[5GB | CPU 250%]</h3>
+                        <div class="price">Rp3.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 5GB | CPU 250% - Rp3.000,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[6GB | CPU 300%]</h3>
+                        <div class="price">Rp3.500,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 6GB | CPU 300% - Rp3.500,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[7GB | CPU 350%]</h3>
+                        <div class="price">Rp4.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 7GB | CPU 350% - Rp4.000,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[8GB | CPU 400%]</h3>
+                        <div class="price">Rp4.500,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 8GB | CPU 400% - Rp4.500,00')">Buy Now</button>
+                    </div>
+                    <div class="dropdown-item">
+                        <h3>[UNLI | CPU UNLIMITED]</h3>
+                        <div class="price">Rp5.000,00</div>
+                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL UNLI | CPU UNLIMITED - Rp5.000,00')">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ADMIN PANEL Product -->
+            <div class="product">
+                <h2>[ADMIN PANEL]</h2>
+                <div class="price">Rp10.000,00</div>
+                <p>Admin panel access</p>
+                <button class="buy-btn" onclick="buyProduct('ADMIN PANEL - Rp10.000,00')">Buy Now</button>
+            </div>
+            
+            <!-- RESELLER PANEL Product -->
+            <div class="product">
+                <h2>[RESELLER PANEL]</h2>
+                <div class="price">Rp5.000,00</div>
+                <p>Reseller panel access</p>
+                <button class="buy-btn" onclick="buyProduct('RESELLER PANEL - Rp5.000,00')">Buy Now</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 FxzzId Store. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Play background music
+        window.onload = function() {
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.3; // Lower volume
+            music.play().catch(e => console.log("Auto-play prevented:", e));
+        };
+        
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const control = document.querySelector('.music-control');
+            
+            if (music.paused) {
+                music.play();
+                control.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 2v20a10 10 0 0 0 0-20zm0 22a12 12 0 1 1 0-24 12 12 0 0 1 0 24z"/></svg>';
+            } else {
+                music.pause();
+                control.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M11 22h-4v-20h4v20zm6-20h-4v20h4v-20z"/></svg>';
+            }
+        }
+        
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const button = dropdown.previousElementSibling;
+            const svg = button.querySelector('svg');
+            
+            if (dropdown.style.display === "block") {
+                dropdown.style.display = "none";
+                svg.innerHTML = '<path d="M6 9l6 6 6-6"/>';
+            } else {
+                dropdown.style.display = "block";
+                svg.innerHTML = '<path d="M6 15l6-6 6 6"/>';
+            }
+        }
+        
+        function buyProduct(productName) {
+            const message = Halo, saya ingin membeli produk: ${productName};
+            const whatsappUrl = https://wa.me/6289676041776?text=${encodeURIComponent(message)};
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
